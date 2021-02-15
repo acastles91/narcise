@@ -76,10 +76,10 @@
 
 // }
 
-#include <Arduino.h>
+<#include <Arduino.h>
 #include "../github-example/hw_timer.h"          
 const byte zcPin = 12;
-const byte pwmPin = 13;  
+const byte pwmPin = 13;  >
 
 byte fade = 1;
 byte state = 1;
