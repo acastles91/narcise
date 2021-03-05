@@ -1,0 +1,57 @@
+EESchema-DOCLIB  Version 2.0
+#
+$CMP IPP060N06N
+D 45A Id, 60V Vds, Single N-Channel Power MOSFET, 6mOhm Ron, TO-220
+K N-Channel Power MOSFET Infineon
+F https://www.infineon.com/dgdl/Infineon-IPP060N06N-DS-v02_02-en.pdf?fileId=db3a30433727a44301372c06d9d7498a
+$ENDCMP
+#
+$CMP IRF3205
+D 110A Id, 55V Vds, Single N-Channel HEXFET Power MOSFET, 8mOhm Ron, TO-220AB
+K Single N-Channel HEXFET Power MOSFET
+F http://www.irf.com/product-info/datasheets/data/irf3205.pdf
+$ENDCMP
+#
+$CMP IRF540N
+D 33A Id, 100V Vds, HEXFET N-Channel MOSFET, TO-220
+K HEXFET N-Channel MOSFET
+F http://www.irf.com/product-info/datasheets/data/irf540n.pdf
+$ENDCMP
+#
+$CMP IRF740
+D 10A Id, 400V Vds, N-Channel Power MOSFET, 500mOhm Rds, TO-220AB
+K N Channel
+F http://www.vishay.com/docs/91054/91054.pdf
+$ENDCMP
+#
+$CMP IRLB8721PBF
+D 62A Id, 30V Vds, 8.7 mOhm Rds, N-Channel HEXFET Power MOSFET, TO-220
+K N-Channel HEXFET MOSFET Logic-Level
+F http://www.infineon.com/dgdl/irlb8721pbf.pdf?fileId=5546d462533600a40153566056732591
+$ENDCMP
+#
+$CMP IRLZ34N
+D 30A Id, 55V Vds, 35mOhm Rds, N-Channel HEXFET Power MOSFET, TO-220AB
+K N-Channel HEXFET MOSFET Logic-Level
+F http://www.infineon.com/dgdl/irlz34npbf.pdf?fileId=5546d462533600a40153567206892720
+$ENDCMP
+#
+$CMP IRLZ44N
+D 47A Id, 55V Vds, 22mOhm Rds Single N-Channel HEXFET Power MOSFET, TO-220AB
+K N-Channel HEXFET MOSFET Logic-Level
+F http://www.irf.com/product-info/datasheets/data/irlz44n.pdf
+$ENDCMP
+#
+$CMP IRLZ44N-horizontal
+D 30A Id, 50V Vds, N-Channel Power MOSFET, TO-220
+K N-Channel Power MOSFET
+F https://media.digikey.com/pdf/Data%20Sheets/Fairchild%20PDFs/BUZ11.pdf
+$ENDCMP
+#
+$CMP VNP10N07
+D 10A Id, 70V Vds, N-Channel Power MOSFET, fully autoprotected, TO-220
+K N-Channel Power MOSFET OMNIFET
+F https://www.st.com/resource/en/datasheet/vnp10n07.pdf
+$ENDCMP
+#
+#End Doc Library

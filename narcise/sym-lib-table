@@ -1,0 +1,4 @@
+(sym_lib_table
+  (lib (name ariadne-rescue)(type Legacy)(uri /home/antonio/dev/ariadne/ariadne-rescue.lib)(options "")(descr ""))
+  (lib (name ariadne-v3-rescue)(type Legacy)(uri /home/antonio/dev/ariadne/ariadne-v3-rescue.lib)(options "")(descr ""))
+)
