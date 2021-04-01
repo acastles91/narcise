@@ -1,0 +1,83 @@
+
+  // for (int i = 0; i < 255; i++){
+  //   analogWrite(pwm1, brightness);
+  //   brightness ++;
+  // }
+  // if (brightness == 255){
+  //   brightness = 0;
+  // }
+
+  //analogWrite(ch2, 100);
+
+  // analogWrite(ch2, 0);
+  // delay(1000);
+  // analogWrite(ch2, 25);
+  // delay(1000);
+  // analogWrite(ch2, 50);
+  // delay(1000);
+  // analogWrite(ch2, 75);
+  // delay(1000);
+  // analogWrite(ch2, 100);
+  // delay(1000);
+  // analogWrite(ch2, 125);
+  // delay(1000);
+  // analogWrite(ch2, 150);
+  // delay(1000);
+  // analogWrite(ch2, 175);
+  // delay(1000);
+  // analogWrite(ch2, 200);
+  // delay(1000);
+  // analogWrite(ch2, 225);
+  // delay(1000);
+  // analogWrite(ch2, 250);
+  // delay(1000);
+
+
+  //DIMM
+
+// if (!fullDim){
+//   for (int i = 0; i < 100; i ++){
+//     analogWrite(ch1, i);
+//     analogWrite(ch2, i);
+//     analogWrite(ch3, i);
+//     analogWrite(ch4, i);
+//     analogWrite(ch5, i);
+//     analogWrite(ch6, i);
+//     analogWrite(ch7, i);
+//     analogWrite(ch8, i);
+//     analogWrite(ch9, i);
+//     analogWrite(ch10, i);
+//     delay(100);
+//     //Serial.println(i);
+//   }
+//   fullDim = true;
+// }
+// if (fullDim){
+//   for (int i = 100; i > 0; i --){
+//     analogWrite(ch1, i);
+//     analogWrite(ch2, i);
+//     analogWrite(ch3, i);
+//     analogWrite(ch4, i);
+//     analogWrite(ch5, i);
+//     analogWrite(ch6, i);
+//     analogWrite(ch7, i);
+//     analogWrite(ch8, i);
+//     analogWrite(ch9, i);
+//     analogWrite(ch10, i);    
+//     delay(100);
+//     //Serial.println(i);
+//   }
+//   fullDim = false;
+}
+
+
+  //brightness = map(analogRead(poti),0,4095, 0, 255);
+  //analogWrite(pwm1, brightness);
+  // Serial.print("Brightness: ");
+  // Serial.println(brightness);
+  // Serial.print("True value: ");
+  // Serial.println(analogRead(poti));
+  // digitalWrite(pwm1, HIGH);
+  // delay(200);
+  // digitalWrite(pwm1, LOW);
+  // delay(200);

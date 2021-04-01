@@ -1,42 +1,69 @@
+#include <iostream>
+#include <vector>
 #include <RBDdimmer.h>
 #include "main.h"
 #include <analogWrite.h>
+#include <stdlib.h>
+//#include "esp32/RBDmcuESP32.h"
+//#include "scriptTestTest.h"
+
 
 //#define USE_SERIAL  SerialUSB //Serial for boards whit USB serial port
 #define USE_SERIAL Serial
 //#define outputPin  12
 //#define zerocross  5 // for boards with CHANGEBLE input pins
 
-#define pwm1 25
-#define pwm2 14
+//PINOUT
+
+#define pwm1 27
+#define pwm2 27
 #define zc1 26
 #define zc2 27
 #define dac1 25
 #define dac2 26
 #define button 5
 
+#define ch1 25  //not ok
+#define ch2 13  //ok
+#define ch3 26  //ok
+#define ch4 21  //ok
+#define ch5 27  //ok
+#define ch6 19  //ok
+#define ch7 14  //not ok
+#define ch8 18  //ok
+#define ch9 12  //ok
+#define ch10  5 //ok
+
+#define TIMER
+
+std::vector<int> layers {ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10};
+std::vector<int> channels {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+const int freq = 500;
+const int ledChannel = 0;
+const int resolution = 8;
 
 int channelA = 12;
 int channelB = 14;
 int period = 400;
 bool fullDim;
-
 int poti = 35;
-
 int brightness = 0;
-
-//dimmerLamp dimmer1(pwm1, zc1); //initialase port for dimmer for ESP8266, ESP32, Arduino due boards
-//dimmerLamp dimmer2(pwm2, zc2); //initialase port for dimmer for ESP8266, ESP32, Arduino due boards
+int maxIndex;
+volatile int indexBrightness = 0;
+volatile bool niceFlag = false;
 
 volatile int interruptCounter;
 volatile bool channelBtrigger;
 volatile bool waitBool;
 volatile bool tickBool;
 
+int layersSize = (int)layers.size();
+
 int totalInterruptCounter;
 
-hw_timer_t *timer = NULL;
-hw_timer_t *timer2 = NULL;
+hw_timer_t * timer = NULL;
+hw_timer_t * timer2 = NULL;
 
 portMUX_TYPE timerMux = portMUX_INITIALIZER_UNLOCKED;
 
@@ -95,6 +122,16 @@ void IRAM_ATTR onTimerB(){
   portEXIT_CRITICAL_ISR(&timerMux);
 }
 
+void IRAM_ATTR finalTrigger(){
+  portENTER_CRITICAL_ISR(&timerMux);
+  for (int i = 0; i < layers.size(); i ++){
+    ledcWrite(channels[i], finalLines[indexBrightness][i]);
+    }
+    indexBrightness ++;
+    niceFlag = true;
+    
+  portEXIT_CRITICAL_ISR(&timerMux);
+}
 
 
 
@@ -114,10 +151,10 @@ void tickA(){
   tickBool = true;
   timer = timerBegin(0, 80, true);
   timer2 = timerBegin(1, 80, true);
-  attachInterrupt(channelA, boolChange, CHANGE);
-  timerAttachInterrupt(timer, onTimerA, true);
-  timerAlarmWrite(timer, (period / 2), true);
-  timerAlarmEnable(timer);
+  // attachInterrupt(channelA, boolChange, CHANGE);
+  // timerAttachInterrupt(timer, onTimerA, true);
+  // timerAlarmWrite(timer, (period / 2), true);
+  // timerAlarmEnable(timer);
   tickBool = false;
 
 }
@@ -161,74 +198,132 @@ void stupid(int periodArg, int durationArg, int channelAarg, int channelBarg){
 
 void setup(){
 
+  #include "codeFile"
+
   Serial.begin(115200);
 
-  pinMode(pwm1, OUTPUT);
+  for (int i = 0; i < layers.size(); i++){
+    pinMode(layers[i], OUTPUT);
+    ledcSetup(channels[i], 100, resolution);
+    ledcAttachPin(layers[i], channels[i]);
+  }
+
+  #ifdef  TIMER
+
+    timer = timerBegin(0, 80, true);
+    timerAttachInterrupt(timer, &finalTrigger, true);
+    timerAlarmWrite(timer, refreshRate * 1000, true);
+    timerAlarmEnable(timer);
+
+  #endif
+
   pinMode(channelA, OUTPUT);
   pinMode(channelB, OUTPUT);
   pinMode(button, OUTPUT);
-  analogWriteFrequency(500);
-  analogWriteResolution(10);
 
-  Serial.begin(115200);
+  analogWriteFrequency(refreshRate);
+  analogWriteResolution(8);
+
   tickBool = false;
   fullDim = false;
   //attachInterrupt(button, tick, HIGH);
 
   digitalWrite(button, HIGH);
 
-  // attachInterrupt(channelA, boolChange, CHANGE);
-  // timerAttachInterrupt(timer, onTimer, true);
-  // timerAlarmWrite(timer, (period / 2), true);
-  // timerAlarmEnable(timer);
-  //timerAlarmEnable(timer2);
-
-  //digitalWrite(channelA, LOW);
   digitalWrite(button, !digitalRead(button));
+  
+  maxIndex = (int)finalLines.size();
 
 
 }
 
 void loop(){
 
+  //ledcWrite(channels[1], 1);
+
   // for (int i = 0; i < 255; i++){
-  //   analogWrite(pwm1, brightness);
-  //   brightness ++;
+  //   analogWrite(layers[1], i);
+    
+  //   //ledcWrite(channels[1], i);
+  //   Serial.println(i);
+  //   delay(2000);
   // }
-  // if (brightness == 255){
-  //   brightness = 0;
-  // }
 
-  //DIMM
+#ifdef TIMER
 
-if (!fullDim){
-  for (int i = 0; i < 50; i ++){
-    analogWrite(pwm1, i);
-    delay(100);
-    Serial.println(i);
+  if (niceFlag == true){
+    Serial.println(indexBrightness);
+    //Serial.println(maxIndex);
+    niceFlag = false;
   }
-  fullDim = true;
-}
-if (fullDim){
-  for (int i = 50; i > 0; i --){
-    analogWrite(pwm1, i);
-    delay(100);
-    Serial.println(i);
 
+  if (indexBrightness == maxIndex){
+
+    if (repeatBool){
+      portENTER_CRITICAL(&timerMux);
+      indexBrightness = 0;
+      portEXIT_CRITICAL(&timerMux);
+    }
+    else{
+
+      timerDetachInterrupt(timer);
+    }
   }
-  fullDim = false;
-}
 
-
-  //brightness = map(analogRead(poti),0,4095, 0, 255);
-  //analogWrite(pwm1, brightness);
-  // Serial.print("Brightness: ");
-  // Serial.println(brightness);
-  // Serial.print("True value: ");
-  // Serial.println(analogRead(poti));
-  // digitalWrite(pwm1, HIGH);
-  // delay(200);
-  // digitalWrite(pwm1, LOW);
-  // delay(200);
+#endif
 
 }
+
+//   analogWrite(ch10, 0);
+//   delay(2000);
+//   analogWrite(ch10, 1);
+//   delay(2000);
+//   analogWrite(ch10, 2);
+//   delay(2000);
+//   analogWrite(ch10, 3);
+//   delay(2000);
+//   analogWrite(ch10, 4);
+//   delay(2000);
+//   analogWrite(ch10, 5);
+//   delay(2000);
+//   analogWrite(ch10, 6);
+//   delay(2000);
+
+
+//   if (!fullDim){
+//   for (int i = 0; i < 30; i ++){
+//     analogWrite(ch1, i);
+//     analogWrite(ch2, i);
+//     analogWrite(ch3, i);
+//     analogWrite(ch4, i);
+//     analogWrite(ch5, i);
+//     analogWrite(ch6, i);
+//     analogWrite(ch7, i);
+//     analogWrite(ch8, i);
+//     analogWrite(ch9, i);
+//     analogWrite(ch10, i);
+//     delay(200);
+//     Serial.println(i);
+//   }
+//   fullDim = true;
+// }
+// if (fullDim){
+//   for (int i = 30; i > 0; i --){
+//     analogWrite(ch1, i);
+//     analogWrite(ch2, i);
+//     analogWrite(ch3, i);
+//     analogWrite(ch4, i);
+//     analogWrite(ch5, i);
+//     analogWrite(ch6, i);
+//     analogWrite(ch7, i);
+//     analogWrite(ch8, i);
+//     analogWrite(ch9, i);
+//     analogWrite(ch10, i);    
+//     delay(200);
+//     Serial.println(i);
+//   }
+//   fullDim = false;
+//   }
+
+
+
