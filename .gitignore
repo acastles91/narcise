@@ -3,3 +3,8 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+narciseFromScratch/.pio
+narciseFromScratch/.vscode/.browse.c_cpp.db*
+narciseFromScratch/.vscode/c_cpp_properties.json
+narciseFromScratch/.vscode/launch.json
+narciseFromScratch/.vscode/ipch
