@@ -12,5 +12,6 @@
 7. After saving the script, go back to *Visual Studio Code*, with the folder *narciseFromScratch* opened. Go to the terminal and type:
 `python3 ../scriptGenerator/scriptGenerator.py 1 200 7`
 
-The argument `1` means that the script will be looped, `200` is the refresh rate (the bigger the value the slower and more "flickery" the piece will look) and `7` is a parameter that relates to the difference between minimal and maximal value. Play around with this last parameter to see differences in the response time of the dimming.
+	The argument `1` means that the script will be looped, `200` is the refresh rate (the bigger the value the slower and more "flickery" the piece will look) and `7` is a parameter that relates to the difference between minimal and maximal value. Play around with this last parameter to see differences in the response time of the dimming.
+
 8. After the script is generated, connect the microcontroller to the computer using a USB cable capable of transfering data and upload the program.
