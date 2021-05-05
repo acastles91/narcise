@@ -34,7 +34,8 @@
 #define ch9 12  //ok
 #define ch10  5 //ok
 
-#define TIMER
+//#define TIMER
+#define TROUBLE
 
 std::vector<int> layers {ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10};
 std::vector<int> channels {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -249,6 +250,16 @@ void loop(){
   //   delay(2000);
   // }
 
+#ifdef TROUBLE
+
+ledcWrite(ch1, 255);
+delay(1000);
+ledcWrite(ch1, 0);
+delay(1000);
+
+#endif
+
+
 #ifdef TIMER
 
   if (niceFlag == true){
@@ -274,56 +285,7 @@ void loop(){
 
 }
 
-//   analogWrite(ch10, 0);
-//   delay(2000);
-//   analogWrite(ch10, 1);
-//   delay(2000);
-//   analogWrite(ch10, 2);
-//   delay(2000);
-//   analogWrite(ch10, 3);
-//   delay(2000);
-//   analogWrite(ch10, 4);
-//   delay(2000);
-//   analogWrite(ch10, 5);
-//   delay(2000);
-//   analogWrite(ch10, 6);
-//   delay(2000);
 
-
-//   if (!fullDim){
-//   for (int i = 0; i < 30; i ++){
-//     analogWrite(ch1, i);
-//     analogWrite(ch2, i);
-//     analogWrite(ch3, i);
-//     analogWrite(ch4, i);
-//     analogWrite(ch5, i);
-//     analogWrite(ch6, i);
-//     analogWrite(ch7, i);
-//     analogWrite(ch8, i);
-//     analogWrite(ch9, i);
-//     analogWrite(ch10, i);
-//     delay(200);
-//     Serial.println(i);
-//   }
-//   fullDim = true;
-// }
-// if (fullDim){
-//   for (int i = 30; i > 0; i --){
-//     analogWrite(ch1, i);
-//     analogWrite(ch2, i);
-//     analogWrite(ch3, i);
-//     analogWrite(ch4, i);
-//     analogWrite(ch5, i);
-//     analogWrite(ch6, i);
-//     analogWrite(ch7, i);
-//     analogWrite(ch8, i);
-//     analogWrite(ch9, i);
-//     analogWrite(ch10, i);    
-//     delay(200);
-//     Serial.println(i);
-//   }
-//   fullDim = false;
-//   }
 
 
 
