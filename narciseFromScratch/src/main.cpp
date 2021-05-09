@@ -252,7 +252,7 @@ void loop(){
 
 #ifdef TROUBLE
 
-ledcWrite(ch1, 255);
+ledcWrite(ch1, 100);
 delay(1000);
 ledcWrite(ch1, 0);
 delay(1000);
