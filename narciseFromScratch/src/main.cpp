@@ -205,9 +205,20 @@ void setup(){
 
   for (int i = 0; i < layers.size(); i++){
     pinMode(layers[i], OUTPUT);
-    ledcSetup(channels[i], 100, resolution);
+    //ledcSetup(channels[i], 100, resolution);
+    ledcSetup(channels[i], refreshRate, resolution);
     ledcAttachPin(layers[i], channels[i]);
   }
+
+  #ifdef TROUBLE
+
+  ledcSetup(1, 100, resolution);
+  ledcAttachPin(ch1, ch1);
+
+  #endif
+
+
+
 
   #ifdef  TIMER
 
@@ -252,7 +263,7 @@ void loop(){
 
 #ifdef TROUBLE
 
-ledcWrite(ch1, 100);
+ledcWrite(ch1, 255);
 delay(1000);
 ledcWrite(ch1, 0);
 delay(1000);
