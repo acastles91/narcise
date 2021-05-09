@@ -34,8 +34,8 @@
 #define ch9 12  //ok
 #define ch10  5 //ok
 
-//#define TIMER
-#define TROUBLE
+#define TIMER
+//#define TROUBLE
 
 std::vector<int> layers {ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10};
 std::vector<int> channels {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -126,7 +126,8 @@ void IRAM_ATTR onTimerB(){
 void IRAM_ATTR finalTrigger(){
   portENTER_CRITICAL_ISR(&timerMux);
   for (int i = 0; i < layers.size(); i ++){
-    ledcWrite(channels[i], finalLines[indexBrightness][i]);
+    //ledcWrite(channels[i], finalLines[indexBrightness][i]); original, for some reason stopped working
+    analogWrite(channels[i], finalLines[indexBrightness][i]);
     }
     indexBrightness ++;
     niceFlag = true;
