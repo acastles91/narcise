@@ -218,8 +218,6 @@ void setup(){
   #endif
 
 
-
-
   #ifdef  TIMER
 
     timer = timerBegin(0, 80, true);
