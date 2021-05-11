@@ -34,8 +34,10 @@
 #define ch9 12  //ok
 #define ch10  5 //ok
 
-#define TIMER
-//#define TROUBLE
+//#define TIMER
+//#define TROUBLE_ANALOG
+#define TROUBLE_DIGITAL
+
 
 std::vector<int> layers {ch1, ch2, ch3, ch4, ch5, ch6, ch7, ch8, ch9, ch10};
 std::vector<int> channels {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
@@ -126,13 +128,30 @@ void IRAM_ATTR onTimerB(){
 void IRAM_ATTR finalTrigger(){
   portENTER_CRITICAL_ISR(&timerMux);
   for (int i = 0; i < layers.size(); i ++){
-    //ledcWrite(channels[i], finalLines[indexBrightness][i]); original, for some reason stopped working
-    analogWrite(channels[i], finalLines[indexBrightness][i]);
+    ledcWrite(channels[i], finalLines[indexBrightness][i]); //original, for some reason stopped working
+    //analogWrite(channels[i], finalLines[indexBrightness][i]);
     }
     indexBrightness ++;
     niceFlag = true;
     
   portEXIT_CRITICAL_ISR(&timerMux);
+}
+
+void tickDigital (int layerArg){
+digitalWrite(layerArg, !digitalRead(layerArg));
+delay(1000);
+
+}
+
+void onDigital (int layerArg){
+  digitalWrite(layerArg, HIGH);
+}
+
+void tickAnalog (int channelArg){
+ledcWrite(channelArg, 255);
+delay(1000);
+ledcWrite(channelArg, 0);
+delay(1000);
 }
 
 
@@ -204,22 +223,27 @@ void setup(){
 
   Serial.begin(115200);
 
+  
+
+  #ifdef TROUBLE_DIGITAL
+  pinMode(ch1, OUTPUT);
+
+  #endif
+
+  #ifdef TROUBLE_ANALOG
+
+  ledcSetup(1, refreshRate, resolution);
+  ledcAttachPin(ch1, 1);
+
+  #endif
+
+  #ifdef  TIMER
   for (int i = 0; i < layers.size(); i++){
     pinMode(layers[i], OUTPUT);
     //ledcSetup(channels[i], 100, resolution);
     ledcSetup(channels[i], refreshRate, resolution);
     ledcAttachPin(layers[i], channels[i]);
   }
-
-  #ifdef TROUBLE
-
-  ledcSetup(1, 100, resolution);
-  ledcAttachPin(ch1, ch1);
-
-  #endif
-
-
-  #ifdef  TIMER
 
     timer = timerBegin(0, 80, true);
     timerAttachInterrupt(timer, &finalTrigger, true);
@@ -260,12 +284,15 @@ void loop(){
   //   delay(2000);
   // }
 
-#ifdef TROUBLE
+#ifdef TROUBLE_DIGITAL
 
-ledcWrite(ch1, 255);
-delay(1000);
-ledcWrite(ch1, 0);
-delay(1000);
+//tickDigital(ch1);
+onDigital(ch1);
+#endif
+
+#ifdef TROUBLE_ANALOG
+
+tickAnalog(1);
 
 #endif
 
